@@ -2,7 +2,7 @@ import logo from "./logo.svg";
 import React from "react";
 import "./App.css";
 import Title from "./components/Title";
-import Title from "./components/Favorites";
+import Favorites from "./components/Favorites";
 
 const jsonLocalStorage = {
   setItem: (key, value) => {
@@ -19,14 +19,6 @@ const fetchCat = async (text) => {
   const responseJson = await response.json();
   return `${OPEN_API_DOMAIN}/${responseJson.url}`;
 };
-
-function CatItem(props) {
-  return (
-    <li>
-      <img src={props.img} style={{ width: "150px" }} />
-    </li>
-  );
-}
 
 const Form = ({ updateMainCat }) => {
   const includesHangul = (text) => /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/i.test(text);
@@ -127,7 +119,7 @@ const App = () => {
 
   return (
     <div>
-      <Title> {counterTitle}번째 고양이 가라사대</Title>
+      <Title> {counterTitle} 고양이 가라사대</Title>
       <Form updateMainCat={updateMainCat} />
       <MainCard
         img={mainCat}
