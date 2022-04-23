@@ -1,7 +1,8 @@
 import logo from "./logo.svg";
 import React from "react";
-import Title from "./components/Title";
 import "./App.css";
+import Title from "./components/Title";
+import Title from "./components/Favorites";
 
 const jsonLocalStorage = {
   setItem: (key, value) => {
@@ -19,6 +20,14 @@ const fetchCat = async (text) => {
   return `${OPEN_API_DOMAIN}/${responseJson.url}`;
 };
 
+function CatItem(props) {
+  return (
+    <li>
+      <img src={props.img} style={{ width: "150px" }} />
+    </li>
+  );
+}
+
 const Form = ({ updateMainCat }) => {
   const includesHangul = (text) => /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/i.test(text);
   const [value, setValue] = React.useState("");
@@ -28,7 +37,7 @@ const Form = ({ updateMainCat }) => {
     const userValue = e.target.value;
     setErrorMessage("");
     if (includesHangul(userValue)) {
-      setErrorMessage("한글은 입력할 수 없습니다.");
+      setErrorMessage("한글은 입력할 수 없습니다");
     }
     setValue(userValue.toUpperCase());
   }
@@ -36,9 +45,8 @@ const Form = ({ updateMainCat }) => {
   function handleFormSubmit(e) {
     e.preventDefault();
     setErrorMessage("");
-
-    if (value === "") {
-      setErrorMessage("빈 값으로 만들 수 없습니다.");
+    if (value == "") {
+      setErrorMessage("빈 값으로 만들 수 없습니다");
       return;
     }
     updateMainCat(value);
@@ -50,36 +58,14 @@ const Form = ({ updateMainCat }) => {
         type="text"
         name="name"
         placeholder="영어 대사를 입력해주세요"
-        value={value}
         onChange={handleInputChange}
+        value={value}
       />
       <button type="submit">생성</button>
       <p style={{ color: "red" }}>{errorMessage}</p>
     </form>
   );
 };
-
-function CatItem(props) {
-  return (
-    <li>
-      <img src={props.img} style={{ width: "150px" }} />
-    </li>
-  );
-}
-
-function Favorites({ favorites }) {
-  if (favorites.length === 0) {
-    return <div>사진 위 하트를 눌러 고양이 사진을 저장해봐요!</div>;
-  }
-
-  return (
-    <ul className="favorites">
-      {favorites.map((cat) => (
-        <CatItem img={cat} key={cat} />
-      ))}
-    </ul>
-  );
-}
 
 const MainCard = ({ img, onHeartClick, alreadyFavorite }) => {
   const heartIcon = alreadyFavorite ? "💖" : "🤍";
@@ -100,7 +86,9 @@ const App = () => {
   const [counter, setCounter] = React.useState(() => {
     return jsonLocalStorage.getItem("counter");
   });
+
   const [mainCat, setMainCat] = React.useState(CAT1);
+
   const [favorites, setFavorites] = React.useState(() => {
     return jsonLocalStorage.getItem("favorites") || [];
   });
@@ -135,11 +123,11 @@ const App = () => {
     jsonLocalStorage.setItem("favorites", nextFavorites);
   }
 
-  const counterTitle = counter === null ? "" : counter + "번째 ";
+  const counterTitle = counter === null ? "" : counter + " 번째";
 
   return (
     <div>
-      <Title>{counterTitle}고양이 가라사대</Title>
+      <Title> {counterTitle}번째 고양이 가라사대</Title>
       <Form updateMainCat={updateMainCat} />
       <MainCard
         img={mainCat}
